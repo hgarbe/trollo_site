@@ -1,0 +1,25 @@
+<h1>Boards</h1>
+<div class="header">
+  <hr />
+    <button class="ui inverted blue button"><%= link_to 'Create New Board', new_board_path %></button>
+  <hr />
+</div>
+
+  <% @boards.each do |board| %>
+    <div class="ui cards">
+      <div class="card">
+        <div class="content">
+          <div class="header">
+            <%= link_to board.name, board_lists_path(board) %>
+          </div>
+          <div class="extra content">
+            <div class="ui two buttons">
+              <div class="ui basic yellow button"><%= link_to 'Edit', edit_board_path(board) %></div>
+              <div class="ui basic red button"><%= link_to 'Delete', board, method: :delete %></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <% end %>
+    
