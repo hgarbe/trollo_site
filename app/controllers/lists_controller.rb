@@ -1,60 +1,43 @@
 class ListsController < ApplicationController
-  before_action :set_board
-  before_action :set_list, only: [:show, :edit, :update, :destroy]
-  
-
+  before_action :set_board, except: [:destroy]
+  before_action :set_list, only: [:edit, :update, :destroy]
 
   def index
-    @lists = @board.lists.all
-  end
-
-  def show
-    
-  end
+    @lists = List.all 
+  end  
 
   def new
     @list = @board.lists.new
-    render partial: "form"
   end
 
   def create
-    @list = @board.lists.new(list_params)
-
-    if @list.save
-      redirect_to board_lists_path(@board, @list)
-    else
-      render :new
-    end
+    @board.lists.create_list(list_params, @board.id)
+    redirect_to @board
   end
 
   def edit
-    render partial: "form"
   end
 
   def update
-    if @list.update(list_params)
-      redirect_to board_lists_path(@board, @list)
-    else
-      render :edit
-    end
+    List.update_list(@list.id, list_params)
+    redirect_to @board
   end
 
   def destroy
     @list.destroy
-    redirect_to board_lists_path
+    redirect_to board_path(@list.board_id)
   end
 
   private
-
-    def set_board
-      @board = Board.find(params[:board_id])
+    def set_list
+      @list = List.single_list(params[:id])
     end
 
-    def set_list
-      @list = List.find(params[:id])
+    def set_board
+      @board = Board.single_board(params[:board_id])
     end
 
     def list_params
-      params.require(:list).permit(:name)
+      params.require(:list).permit(:title, :priority)
     end
 end

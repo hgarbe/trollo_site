@@ -1,56 +1,40 @@
 class TasksController < ApplicationController
   before_action :set_list
-  before_action :set_task, only: [:show, :edit, :update, :destroy]
-  
-  def index
-  end
-
-  def show
-  end
+  before_action :set_task, only: [:edit, :update, :destroy]
 
   def new
-    @task = Task.new
-    render partial: 'form'
+    @task = @list.tasks.new
   end
 
   def create
-    @task = @list.tasks.new(task_params)
-    if @task.save
-      redirect_to board_list_path(@list.board_id, @list)
-    else
-      render :new
-    end
+    @list.tasks.new(task_params).save
+    redirect_to board_path(@list.board_id)
   end
 
   def edit
-    render partial: 'form'
   end
 
   def update
-    if @task.update(task_params)
-      redirect_to board_list_path(@list.board_id, @list)
-    else
-      render :edit
-    end
+    Task.update_task(@task.id, task_params)
+    redirect_to board_path(@list.board_id)
   end
 
-
   def destroy
-
     @task.destroy
-    redirect_to board_list_path(@list.board_id, @list)
+    redirect_to board_path(board_id)
   end
 
   private
-    def set_list
-      @list = List.find(params[:list_id])
-    end
-    
     def set_task
-      @task = Task.find(params[:id])
+      @task = Task.single_task(params[:id])
     end
-    
+
+    def set_list
+      @list = List.single_list(params[:list_id])
+    end
+
     def task_params
-      params.require(:task).permit(:name, :body)
+      params.require(:task).permit(:title, :description, :priority)
     end
+
 end

@@ -11,7 +11,7 @@ Rails.application.routes.draw do
   end
 
   resources :boards, shallow: true do
-    resources :lists, shallow: true do
+    resources :lists do
       resources :tasks
     end
   end

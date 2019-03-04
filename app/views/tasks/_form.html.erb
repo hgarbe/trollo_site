@@ -1,7 +1,7 @@
   <%= form_with(model: [@list, @task], local: true, class: "ui form") do |f| %>
     <div class="field">
-      <%= f.label "Task Name" %>
-      <%= f.text_field :t_name, required: true, class: "input" %>
+      <%= f.label "Task" %>
+      <%= f.text_field :title, required: true, class: "input" %>
     </div>
     <div class="field">
       <%= f.label "Description" %>
@@ -9,17 +9,20 @@
     </div>
     <div class="field">
       <%= f.label "Priority" %>
-      <%= f.number_field :t_priority, required: true, class: "input" %>
+      <%= f.number_field :priority, required: true, class: "input" %>
     </div>
     <% if @task.id %>
       <div class="field">
         <%= f.label "List" %>
         <%= f.select(:list_id, required: true) do %>
           <% @lists.each do |list| %>
-            <%= content_tag(:option, list.l_name, value: [list.id])%>
+            <%= content_tag(:option, list.list_title, value: [list.id])%>
           <%end%>
         <%end%>
       </div>
     <% end %>
   <%= f.submit nil, class: "ui blue button" %>
   <% end %>
+
+
+
